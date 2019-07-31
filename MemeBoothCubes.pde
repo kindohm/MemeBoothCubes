@@ -5,9 +5,9 @@
 
 static final float yFloor = 1300;
 static final float yVary = 1700;
-static final int rows = 60;
-static final int cols = 30;
-static final float cubeSize = 100;
+static final int rows = 30;
+static final int cols = 20;
+static final float cubeSize = 300;
 static final float spacing = 1.5;
 static final float transCubeSize = cubeSize * spacing;
 static final float zTrans = (rows - 2) * transCubeSize;
@@ -19,7 +19,7 @@ Cube[] cubes;
 DofManager dof;
 
 public void setup() {
-  size(800, 800, P3D);
+  size(1000, 1000, P3D);
   // fullScreen(P3D);
   dof = new DofManager();
   dof.setup(this, width, height);
@@ -73,13 +73,22 @@ private void drawGeometry(PGraphics pg, boolean lights) {
   }
 
   if (cubes != null && cubes.length > 0) {
+    
+    pg.pushMatrix();
+    pg.rotateY(0.785398);
+    
     for (int i = 0; i < cubes.length; i++) {
       pg.pushMatrix();
       pg.translate(cubes[i].x * transCubeSize - xTransConst, cubes[i].y, -zTrans + cubes[i].z * transCubeSize);
       pg.shape(cubes[i].shape);
       pg.popMatrix();
     }
-  }
+
+    pg.rotateY(-0.785398);
+    pg.popMatrix();
+
+
+}
 
 
   pg.endDraw();
