@@ -1,13 +1,13 @@
-/** //<>//
+/** //<>// //<>//
  Based on: https://github.com/hamoid/P5PostProcessing 
  Move your mouse in X to change focus distance.
  **/
 
-static final float yFloor = 1300;
-static final float yVary = 1700;
-static final int rows = 60;
-static final int cols = 30;
-static final float cubeSize = 100;
+static final float yFloor = -200;
+static final float yVary = 0;
+static final int rows = 1;
+static final int cols = 1;
+static final float cubeSize = 300;
 static final float spacing = 1.5;
 static final float transCubeSize = cubeSize * spacing;
 static final float zTrans = (rows - 2) * transCubeSize;
@@ -27,20 +27,21 @@ public void setup() {
 }
 
 void generateCubes() {
-  cubes = new Cube[rows * cols];
+  cubes = new Cube[7];
   lightVals = new float[] {random(-1, 1), random(-1, 1), random(-1, 1), random(-1, 1), random(-1, 1), random(-1, 1) };
   int rowCols;
 
   PShape shape;
-  for (int row = 0; row < rows; row++) {
-    rowCols = row * cols;
-    for (int col = 0; col < cols; col++) {
+    for (int i = 0; i < 7; i++) {
       shape = createShape(BOX, cubeSize);
-      shape.setFill(color(0, random(0, 255), random(0, 255)));
+      if (i == 4){
+        shape.setFill(color(random(100, 255), 0, random(100, 255)));
+      } else {
+        shape.setFill(color(0, random(100, 255), random(100, 255)));
+      }
       shape.setStroke(false);
-      cubes[col + rowCols] = new Cube(col, yFloor - random(0, yVary), row, shape);
+      cubes[i] = new Cube(i, 0, 0, shape);
     }
-  }
 }
 
 public void draw() {
@@ -75,7 +76,8 @@ private void drawGeometry(PGraphics pg, boolean lights) {
   if (cubes != null && cubes.length > 0) {
     for (int i = 0; i < cubes.length; i++) {
       pg.pushMatrix();
-      pg.translate(cubes[i].x * transCubeSize - xTransConst, cubes[i].y, -zTrans + cubes[i].z * transCubeSize);
+      pg.translate(cubes[i].x * 400 - (3.5*400/2), 1000, -3000);
+      pg.rotateX (-0.2);
       pg.shape(cubes[i].shape);
       pg.popMatrix();
     }
