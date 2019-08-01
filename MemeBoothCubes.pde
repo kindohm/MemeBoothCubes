@@ -5,8 +5,9 @@
 
 static final float yFloor = -200;
 static final float yVary = 0;
-static final int rows = 1;
-static final int cols = 1;
+static final int rows = 5;
+static final int cols = 5;
+static final int slots = 5;
 static final float cubeSize = 300;
 static final float spacing = 1.5;
 static final float transCubeSize = cubeSize * spacing;
@@ -20,7 +21,7 @@ Cube[] cubes;
 DofManager dof;
 
 public void setup() {
-  size(1400, 1400, P3D);
+  size(1000, 1000, P3D);
   // fullScreen(P3D);
   dof = new DofManager();
   dof.setup(this, width, height);
@@ -28,21 +29,25 @@ public void setup() {
 }
 
 void generateCubes() {
+  int count = rows * cols * slots;
   cubes = new Cube[count];
   lightVals = new float[] {random(-1, 1), random(-1, 1), random(-1, 1), random(-1, 1), random(-1, 1), random(-1, 1) };
   int rowCols;
 
   PShape shape;
-    for (int i = 0; i < count; i++) {
-      shape = createShape(BOX, cubeSize);
-      if (i == 4){
-        shape.setFill(color(random(100, 255), 0, random(100, 255)));
-      } else {
-        shape.setFill(color(0, random(0, 255), random(100, 255)));
+  int i = 0;
+  for (int col = 0; col < cols; col++) {
+    for (int row = 0; row < rows; row++) {
+      for (int slot = 0; slot < slots; slot++) {
+
+        shape = createShape(BOX, cubeSize);
+          shape.setFill(color(0, random(0, 255), random(100, 255)));
+        shape.setStroke(false);
+        cubes[i] = new Cube(col, row, slot, shape);
+        i++;
       }
-      shape.setStroke(false);
-      cubes[i] = new Cube(i, 0, 0, shape);
     }
+  }
 }
 
 public void draw() {
@@ -81,18 +86,23 @@ private void drawGeometry(PGraphics pg, boolean lights) {
   }
 
   float spacing = 400;
-// - (0*count*spacing/4)
+  // - (0*count*spacing/4)
 
 
   if (cubes != null && cubes.length > 0) {
+    pg.pushMatrix();
+    pg.rotateY(-0.4);
+    pg.rotateX(0);
+    
     for (int i = 0; i < cubes.length; i++) {
       pg.pushMatrix();
-      pg.translate(cubes[i].x * spacing - 400, 1000, -3000);
-      pg.rotateX (-0.2);
+      pg.translate(cubes[i].x * spacing - 1200, cubes[i].y * spacing - 400 + 200, cubes[i].z * spacing - 400 - 3000);
+      //pg.rotateX (-0.2);
       pg.shape(cubes[i].shape);
       pg.popMatrix();
     }
     
+    pg.popMatrix();
   }
 
 
